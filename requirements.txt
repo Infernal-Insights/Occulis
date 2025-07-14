@@ -1,0 +1,13 @@
+fastapi
+httpx
+pydantic
+redis
+duckdb
+python-dotenv
+gpiozero
+jinja2
+schedule
+pyyaml
+uvicorn
+smtplib
+nginx
