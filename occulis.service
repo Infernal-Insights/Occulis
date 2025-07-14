@@ -1,0 +1,11 @@
+[Unit]
+Description=Occulis Mining Manager
+After=network.target
+
+[Service]
+WorkingDirectory=/path/to/Occulis
+ExecStart=/usr/bin/python3 -m uvicorn occulis_server.main:app --host 0.0.0.0 --port 8000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

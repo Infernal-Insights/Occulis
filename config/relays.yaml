@@ -1,0 +1,6 @@
+rig1:
+  pin: 17
+  pulse_seconds: 2
+rig2:
+  pin: 27
+  pulse_seconds: 2
