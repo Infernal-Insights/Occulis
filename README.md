@@ -33,3 +33,12 @@ Use `scripts/cycle_relay.py <rig>` to manually trigger a relay.
 `POST /power/reboot/{rig_name}` will pulse the GPIO relay assigned to the rig's
 reset header for the configured duration. Each action is recorded in
 `data/duckdb/power.duckdb`.
+
+## Display Status Screen
+A simple Tkinter interface can show current rig statistics on a Raspberry Pi 7" display. It is independent of the FastAPI dashboard and won't interfere with other monitoring tools. Launch it with:
+
+```bash
+python scripts/display_status.py [--host localhost] [--port 6379] [--interval 5000]
+```
+
+The script polls Redis for rig data and updates the screen every few seconds. Redis connection parameters can also be provided via the environment variables `OCCULIS_REDIS_HOST` and `OCCULIS_REDIS_PORT`.
