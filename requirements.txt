@@ -9,5 +9,4 @@ jinja2
 schedule
 pyyaml
 uvicorn
-smtplib
-nginx
+pytest-asyncio
