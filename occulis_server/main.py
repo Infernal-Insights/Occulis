@@ -43,7 +43,7 @@ async def root(token: HTTPAuthorizationCredentials = Depends(verify_token)):
 
 @app.post("/power/reboot/{rig_name}")
 async def reboot_rig(rig_name: str, token: HTTPAuthorizationCredentials = Depends(verify_token)):
-    if not power.cycle_relay(rig_name):
+    if not power.trigger_relay(rig_name):
         raise HTTPException(status_code=404, detail="Rig not found")
-    return {"status": "reboot_triggered", "rig": rig_name}
+    return {"status": f"{rig_name} reset triggered via relay."}
 

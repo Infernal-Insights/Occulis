@@ -28,3 +28,8 @@ WantedBy=multi-user.target
 ## Testing
 Run tests with `pytest`.
 Use `scripts/cycle_relay.py <rig>` to manually trigger a relay.
+
+### API
+`POST /power/reboot/{rig_name}` will pulse the GPIO relay assigned to the rig's
+reset header for the configured duration. Each action is recorded in
+`data/duckdb/power.duckdb`.
