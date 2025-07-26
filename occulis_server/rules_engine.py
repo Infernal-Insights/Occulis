@@ -14,6 +14,11 @@ class RulesEngine:
         self.redis = redis_client
         with open(rules_path, 'r') as f:
             self.rules = yaml.safe_load(f) or []
+        # load rig and worker mappings for reboot actions
+        with open('config/rigs.yaml', 'r') as f:
+            self.rig_map = yaml.safe_load(f) or {}
+        with open('config/hashmancer_workers.yaml', 'r') as f:
+            self.worker_map = yaml.safe_load(f) or {}
         self.state = {}
 
     def _evaluate_condition(self, rig_data: Dict[str, Any], condition: str) -> bool:
@@ -46,9 +51,11 @@ class RulesEngine:
     async def execute_actions(self, actions, rig_name):
         for act in actions:
             if act == 'api.reboot':
-                await self.api.reboot_rig(rig_name)
+                rig_id = self.rig_map.get(rig_name, rig_name)
+                await self.api.reboot_rig(rig_id)
             elif act == 'hashmancer.reboot' and self.hm_api:
-                await self.hm_api.reboot_worker(rig_name)
+                worker_id = self.worker_map.get(rig_name, rig_name)
+                await self.hm_api.reboot_worker(worker_id)
             elif act == 'power.gpio_cycle':
                 self.power.cycle_relay(rig_name)
             elif act == 'notify.email':

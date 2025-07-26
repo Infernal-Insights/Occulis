@@ -6,8 +6,11 @@ from occulis_server.power_control import PowerController
 from occulis_server.notifier import Notifier
 
 class DummyAPI:
+    def __init__(self):
+        self.last_id = None
+
     async def reboot_rig(self, rig_id):
-        pass
+        self.last_id = rig_id
 
 class DummyRedis:
     def __init__(self):
@@ -30,9 +33,10 @@ async def test_rule_trigger():
 
 class DummyHM:
     def __init__(self):
-        self.called = False
+        self.last_id = None
+
     async def reboot_worker(self, worker_id):
-        self.called = True
+        self.last_id = worker_id
 
 @pytest.mark.asyncio
 async def test_hashmancer_action(monkeypatch):
@@ -41,5 +45,16 @@ async def test_hashmancer_action(monkeypatch):
     notif = Notifier()
     hm = DummyHM()
     engine = RulesEngine('config/rules.yaml', DummyAPI(), power, notif, DummyRedis(), hm)
-    await engine.execute_actions(['hashmancer.reboot'], 'rig1')
-    assert hm.called
+    await engine.execute_actions(['hashmancer.reboot'], 'worker1')
+    assert hm.last_id == 'WORKER_ID_1'
+
+
+@pytest.mark.asyncio
+async def test_api_action(monkeypatch):
+    os.environ["GPIOZERO_PIN_FACTORY"] = "mock"
+    power = PowerController('config/relays.yaml')
+    notif = Notifier()
+    api = DummyAPI()
+    engine = RulesEngine('config/rules.yaml', api, power, notif, DummyRedis())
+    await engine.execute_actions(['api.reboot'], 'rig2')
+    assert api.last_id == 'RIG_ID_2'
