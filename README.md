@@ -5,8 +5,9 @@ Occulis is a Raspberry Pi based manager for NiceHash OS rigs. It polls the NiceH
 ## Setup
 1. Install dependencies: `pip install -r requirements.txt`
 2. Configure rigs and relays in `config/rigs.yaml` and `config/relays.yaml`.
-3. Add NiceHash and email credentials in `config/secrets.env`.
-4. Run with `uvicorn occulis_server.main:app --host 0.0.0.0 --port 8000`
+3. Configure Hashmancer workers in `config/hashmancer_workers.yaml`.
+4. Add NiceHash, Hashmancer, and email credentials in `config/secrets.env`.
+5. Run with `uvicorn occulis_server.main:app --host 0.0.0.0 --port 8000`
 
 ## Systemd Service
 An example systemd unit:
@@ -42,3 +43,7 @@ python scripts/display_status.py [--host localhost] [--port 6379] [--interval 50
 ```
 
 The script polls Redis for rig data and updates the screen every few seconds. Redis connection parameters can also be provided via the environment variables `OCCULIS_REDIS_HOST` and `OCCULIS_REDIS_PORT`.
+
+### Environment Variables
+* `HM_API_URL` - base URL for Hashmancer's FastAPI (default `http://localhost:8001`).
+* `HM_API_TOKEN` - optional bearer token for authenticated requests.
