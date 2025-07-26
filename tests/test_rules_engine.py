@@ -57,7 +57,7 @@ async def test_hashmancer_action(monkeypatch):
 @pytest.mark.asyncio
 async def test_api_action(monkeypatch):
     os.environ["GPIOZERO_PIN_FACTORY"] = "mock"
-    power = PowerController('config/relays.yaml')
+    power = PowerController('config/rigs.yaml')
     notif = Notifier()
     api = DummyAPI()
     engine = RulesEngine('config/rules.yaml', api, power, notif, DummyRedis())

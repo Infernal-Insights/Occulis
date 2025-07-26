@@ -17,10 +17,16 @@ class RulesEngine:
         # load rig and worker ID mappings for reboot actions
         with open('config/rigs.yaml', 'r') as f:
             rigs = yaml.safe_load(f) or {}
+
         # map rig name to NiceHash ID (or generic ID if defined)
         self.rig_map = {name: cfg.get('id') for name, cfg in rigs.items() if 'id' in cfg}
-        with open('config/hashmancer_workers.yaml', 'r') as f:
-            self.worker_map = yaml.safe_load(f) or {}
+
+        # Hashmancer worker IDs are now stored in the unified rig configuration
+        self.worker_map = {
+            name: cfg['id']
+            for name, cfg in rigs.items()
+            if cfg.get('type') == 'hashmancer' and 'id' in cfg
+        }
         self.state = {}
 
     def _evaluate_condition(self, rig_data: Dict[str, Any], condition: str) -> bool:
