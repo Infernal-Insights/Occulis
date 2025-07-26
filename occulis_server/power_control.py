@@ -1,5 +1,5 @@
 import yaml
-import time
+import asyncio
 import duckdb
 from datetime import datetime
 try:
@@ -38,16 +38,16 @@ class PowerController:
             "CREATE TABLE IF NOT EXISTS relay_log (timestamp TIMESTAMP, rig TEXT, pin INTEGER)"
         )
 
-    def cycle_relay(self, rig_name: str) -> bool:
-        return self.trigger_relay(rig_name)
+    async def cycle_relay(self, rig_name: str) -> bool:
+        return await self.trigger_relay(rig_name)
 
-    def trigger_relay(self, rig_name: str) -> bool:
+    async def trigger_relay(self, rig_name: str) -> bool:
         cfg = self.relays_config.get(rig_name)
         relay = self.relays.get(rig_name)
         if not cfg or not relay:
             return False
         relay.on()
-        time.sleep(cfg.get('pulse_seconds', 1))
+        await asyncio.sleep(cfg.get('pulse_seconds', 1))
         relay.off()
         self.db.execute(
             "INSERT INTO relay_log VALUES (?, ?, ?)",

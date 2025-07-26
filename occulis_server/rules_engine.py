@@ -65,6 +65,6 @@ class RulesEngine:
                 worker_id = self.worker_map.get(rig_name, rig_name)
                 await self.hm_api.reboot_worker(worker_id)
             elif act == 'power.gpio_cycle':
-                self.power.cycle_relay(rig_name)
+                await self.power.cycle_relay(rig_name)
             elif act == 'notify.email':
                 self.notifier.send_email(f"Rule triggered for {rig_name}")
