@@ -1,0 +1,18 @@
+rig1:
+  pin: 17
+  pulse_seconds: 1
+rig2:
+  pin: 27
+  pulse_seconds: 1
+rig3:
+  pin: 22
+  pulse_seconds: 1
+rig4:
+  pin: 5
+  pulse_seconds: 1
+rig5:
+  pin: 6
+  pulse_seconds: 1
+rig6:
+  pin: 13
+  pulse_seconds: 1

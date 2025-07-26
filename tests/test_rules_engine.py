@@ -30,6 +30,9 @@ async def test_rule_trigger():
     notif = Notifier()
     engine = RulesEngine('config/rules.yaml', DummyAPI(), power, notif, DummyRedis())
     await run_once(engine)
+    assert 'rig1:int(temp) > 85' in engine.state
+    for r in power.relays.values():
+        r.close()
 
 class DummyHM:
     def __init__(self):
@@ -47,6 +50,8 @@ async def test_hashmancer_action(monkeypatch):
     engine = RulesEngine('config/rules.yaml', DummyAPI(), power, notif, DummyRedis(), hm)
     await engine.execute_actions(['hashmancer.reboot'], 'worker1')
     assert hm.last_id == 'WORKER_ID_1'
+    for r in power.relays.values():
+        r.close()
 
 
 @pytest.mark.asyncio
@@ -57,4 +62,11 @@ async def test_api_action(monkeypatch):
     api = DummyAPI()
     engine = RulesEngine('config/rules.yaml', api, power, notif, DummyRedis())
     await engine.execute_actions(['api.reboot'], 'rig2')
-    assert api.last_id == 'RIG_ID_2'
+    assert api.last_id == {
+        'type': 'nicehash',
+        'id': 'RIG_ID_2',
+        'pin': 27,
+        'pulse_seconds': 1,
+    }
+    for r in power.relays.values():
+        r.close()

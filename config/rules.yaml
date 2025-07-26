@@ -1,5 +1,5 @@
 - rig: rig1
-  condition: "int(stats['temp']) > 85"
+  condition: "int(temp) > 85"
   duration: 300
   actions:
     - power.gpio_cycle
