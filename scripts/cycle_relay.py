@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+import asyncio
 from occulis_server.power_control import PowerController
 
 if __name__ == '__main__':
@@ -7,5 +8,5 @@ if __name__ == '__main__':
         print('Usage: cycle_relay.py <rig_name>')
         sys.exit(1)
     pc = PowerController('config/rigs.yaml')
-    if not pc.trigger_relay(sys.argv[1]):
+    if not asyncio.run(pc.trigger_relay(sys.argv[1])):
         print('Unknown rig')
