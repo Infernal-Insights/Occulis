@@ -62,11 +62,6 @@ async def test_api_action(monkeypatch):
     api = DummyAPI()
     engine = RulesEngine('config/rules.yaml', api, power, notif, DummyRedis())
     await engine.execute_actions(['api.reboot'], 'rig2')
-    assert api.last_id == {
-        'type': 'nicehash',
-        'id': 'RIG_ID_2',
-        'pin': 27,
-        'pulse_seconds': 1,
-    }
+    assert api.last_id == 'RIG_ID_2'
     for r in power.relays.values():
         r.close()

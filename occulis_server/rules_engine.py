@@ -14,9 +14,11 @@ class RulesEngine:
         self.redis = redis_client
         with open(rules_path, 'r') as f:
             self.rules = yaml.safe_load(f) or []
-        # load rig and worker mappings for reboot actions
+        # load rig and worker ID mappings for reboot actions
         with open('config/rigs.yaml', 'r') as f:
-            self.rig_map = yaml.safe_load(f) or {}
+            rigs = yaml.safe_load(f) or {}
+        # map rig name to NiceHash ID (or generic ID if defined)
+        self.rig_map = {name: cfg.get('id') for name, cfg in rigs.items() if 'id' in cfg}
         with open('config/hashmancer_workers.yaml', 'r') as f:
             self.worker_map = yaml.safe_load(f) or {}
         self.state = {}
