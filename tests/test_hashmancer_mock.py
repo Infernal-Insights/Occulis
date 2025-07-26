@@ -20,7 +20,7 @@ async def test_poll_loop(monkeypatch):
         def hset(self, name, mapping):
             redis[name] = mapping
     r = Redis()
-    task = asyncio.create_task(api.poll_loop('config/hashmancer_workers.yaml', r))
+    task = asyncio.create_task(api.poll_loop('config/rigs.yaml', r))
     await asyncio.sleep(0.1)
     task.cancel()
     assert 'worker1' in redis

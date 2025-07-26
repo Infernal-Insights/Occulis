@@ -22,7 +22,7 @@ redis_client = redis.Redis(host='localhost', port=6379, db=0)
 nh_api = NiceHashAPI()
 hm_api = HashmancerAPI()
 notifier = Notifier()
-power = PowerController(os.path.join('config', 'relays.yaml'))
+power = PowerController(os.path.join('config', 'rigs.yaml'))
 rules = RulesEngine(
     os.path.join('config', 'rules.yaml'),
     nh_api,
@@ -41,7 +41,7 @@ async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(secur
 @app.on_event("startup")
 async def startup_event():
     asyncio.create_task(nh_api.poll_loop(os.path.join('config', 'rigs.yaml'), redis_client))
-    asyncio.create_task(hm_api.poll_loop(os.path.join('config', 'hashmancer_workers.yaml'), redis_client))
+    asyncio.create_task(hm_api.poll_loop(os.path.join('config', 'rigs.yaml'), redis_client))
     asyncio.create_task(rules.run_loop())
 
 

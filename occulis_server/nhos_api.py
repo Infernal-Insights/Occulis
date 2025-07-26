@@ -28,10 +28,12 @@ class NiceHashAPI:
         return resp.json()
 
     async def poll_loop(self, rigs_config: str, redis_client):
+        """Continuously poll NiceHash rigs defined in the unified config."""
         with open(rigs_config, 'r') as f:
-            rigs = yaml.safe_load(f)
+            rigs = yaml.safe_load(f) or {}
+        nh_rigs = {n: cfg['id'] for n, cfg in rigs.items() if cfg.get('type') == 'nicehash'}
         while True:
-            for name, rig_id in rigs.items():
+            for name, rig_id in nh_rigs.items():
                 try:
                     stats = await self.get(f'/main/api/v2/mining/rig/stats/{rig_id}')
                     redis_client.hset(name, mapping=stats)

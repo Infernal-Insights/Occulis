@@ -6,7 +6,7 @@ from occulis_server.power_control import PowerController
 def test_trigger_relay_logs(tmp_path, monkeypatch):
     os.environ["GPIOZERO_PIN_FACTORY"] = "mock"
     db_path = tmp_path / "power.duckdb"
-    pc = PowerController('config/relays.yaml')
+    pc = PowerController('config/rigs.yaml')
     # redirect database to temp path for test
     pc.db.close()
     pc.db = duckdb.connect(str(db_path))

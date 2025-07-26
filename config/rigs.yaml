@@ -1,6 +1,54 @@
-rig1: RIG_ID_1
-rig2: RIG_ID_2
-rig3: RIG_ID_3
-rig4: RIG_ID_4
-rig5: RIG_ID_5
-rig6: RIG_ID_6
+rig1:
+  type: nicehash
+  id: RIG_ID_1
+  pin: 17
+  pulse_seconds: 1
+rig2:
+  type: nicehash
+  id: RIG_ID_2
+  pin: 27
+  pulse_seconds: 1
+rig3:
+  type: nicehash
+  id: RIG_ID_3
+  pin: 22
+  pulse_seconds: 1
+rig4:
+  type: nicehash
+  id: RIG_ID_4
+  pin: 5
+  pulse_seconds: 1
+rig5:
+  type: nicehash
+  id: RIG_ID_5
+  pin: 6
+  pulse_seconds: 1
+rig6:
+  type: nicehash
+  id: RIG_ID_6
+  pin: 13
+  pulse_seconds: 1
+worker1:
+  type: hashmancer
+  id: WORKER_ID_1
+  pin: 2
+worker2:
+  type: hashmancer
+  id: WORKER_ID_2
+  pin: 3
+worker3:
+  type: hashmancer
+  id: WORKER_ID_3
+  pin: 4
+worker4:
+  type: hashmancer
+  id: WORKER_ID_4
+  pin: 7
+worker5:
+  type: hashmancer
+  id: WORKER_ID_5
+  pin: 8
+worker6:
+  type: hashmancer
+  id: WORKER_ID_6
+  pin: 9
