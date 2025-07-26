@@ -27,3 +27,19 @@ async def test_rule_trigger():
     notif = Notifier()
     engine = RulesEngine('config/rules.yaml', DummyAPI(), power, notif, DummyRedis())
     await run_once(engine)
+
+class DummyHM:
+    def __init__(self):
+        self.called = False
+    async def reboot_worker(self, worker_id):
+        self.called = True
+
+@pytest.mark.asyncio
+async def test_hashmancer_action(monkeypatch):
+    os.environ["GPIOZERO_PIN_FACTORY"] = "mock"
+    power = PowerController('config/relays.yaml')
+    notif = Notifier()
+    hm = DummyHM()
+    engine = RulesEngine('config/rules.yaml', DummyAPI(), power, notif, DummyRedis(), hm)
+    await engine.execute_actions(['hashmancer.reboot'], 'rig1')
+    assert hm.called

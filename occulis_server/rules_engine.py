@@ -5,9 +5,10 @@ from typing import Dict, Any
 
 
 class RulesEngine:
-    def __init__(self, rules_path: str, api, power, notifier, redis_client):
+    def __init__(self, rules_path: str, api, power, notifier, redis_client, hashmancer_api=None):
         self.rules_path = rules_path
         self.api = api
+        self.hm_api = hashmancer_api
         self.power = power
         self.notifier = notifier
         self.redis = redis_client
@@ -46,6 +47,8 @@ class RulesEngine:
         for act in actions:
             if act == 'api.reboot':
                 await self.api.reboot_rig(rig_name)
+            elif act == 'hashmancer.reboot' and self.hm_api:
+                await self.hm_api.reboot_worker(rig_name)
             elif act == 'power.gpio_cycle':
                 self.power.cycle_relay(rig_name)
             elif act == 'notify.email':

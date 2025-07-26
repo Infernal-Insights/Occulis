@@ -3,6 +3,7 @@ import asyncio
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from .nhos_api import NiceHashAPI
+from .hashmancer_api import HashmancerAPI
 from .rules_engine import RulesEngine
 from .power_control import PowerController
 from .notifier import Notifier
@@ -19,9 +20,17 @@ security = HTTPBearer()
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 nh_api = NiceHashAPI()
+hm_api = HashmancerAPI()
 notifier = Notifier()
 power = PowerController(os.path.join('config', 'relays.yaml'))
-rules = RulesEngine(os.path.join('config', 'rules.yaml'), nh_api, power, notifier, redis_client)
+rules = RulesEngine(
+    os.path.join('config', 'rules.yaml'),
+    nh_api,
+    power,
+    notifier,
+    redis_client,
+    hm_api,
+)
 
 
 async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
@@ -32,6 +41,7 @@ async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(secur
 @app.on_event("startup")
 async def startup_event():
     asyncio.create_task(nh_api.poll_loop(os.path.join('config', 'rigs.yaml'), redis_client))
+    asyncio.create_task(hm_api.poll_loop(os.path.join('config', 'hashmancer_workers.yaml'), redis_client))
     asyncio.create_task(rules.run_loop())
 
 
