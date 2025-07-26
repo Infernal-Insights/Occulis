@@ -57,3 +57,9 @@ The script polls Redis for rig data and updates the screen every few seconds. Re
 ### Environment Variables
 * `HM_API_URL` - base URL for Hashmancer's FastAPI (default `http://localhost:8001`).
 * `HM_API_TOKEN` - optional bearer token for authenticated requests.
+* `API_TOKEN` - NiceHash API bearer token.
+* `NH_ORG_ID` - NiceHash organization ID.
+* `NH_API_KEY` - NiceHash API key.
+* `NH_API_SECRET` - NiceHash API secret.
+
+These credentials should be stored in `config/secrets.env`.
