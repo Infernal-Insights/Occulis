@@ -28,8 +28,10 @@ class HashmancerAPI:
         return resp.json()
 
     async def poll_loop(self, workers_config: str, redis_client):
+        """Poll Hashmancer workers defined in the unified rig configuration."""
         with open(workers_config, 'r') as f:
-            workers = yaml.safe_load(f) or {}
+            rigs = yaml.safe_load(f) or {}
+        workers = {n: cfg['id'] for n, cfg in rigs.items() if cfg.get('type') == 'hashmancer'}
         while True:
             for name, worker_id in workers.items():
                 try:

@@ -23,7 +23,7 @@ async def run_once(engine):
 @pytest.mark.asyncio
 async def test_rule_trigger():
     os.environ["GPIOZERO_PIN_FACTORY"] = "mock"
-    power = PowerController('config/relays.yaml')
+    power = PowerController('config/rigs.yaml')
     notif = Notifier()
     engine = RulesEngine('config/rules.yaml', DummyAPI(), power, notif, DummyRedis())
     await run_once(engine)
@@ -37,7 +37,7 @@ class DummyHM:
 @pytest.mark.asyncio
 async def test_hashmancer_action(monkeypatch):
     os.environ["GPIOZERO_PIN_FACTORY"] = "mock"
-    power = PowerController('config/relays.yaml')
+    power = PowerController('config/rigs.yaml')
     notif = Notifier()
     hm = DummyHM()
     engine = RulesEngine('config/rules.yaml', DummyAPI(), power, notif, DummyRedis(), hm)

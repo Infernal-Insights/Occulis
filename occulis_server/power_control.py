@@ -15,7 +15,15 @@ except ImportError:  # for development without GPIO
 
 def load_relays(path):
     with open(path, 'r') as f:
-        return yaml.safe_load(f) or {}
+        rigs = yaml.safe_load(f) or {}
+    relays = {}
+    for name, cfg in rigs.items():
+        if 'pin' in cfg:
+            relays[name] = {
+                'pin': cfg['pin'],
+                'pulse_seconds': cfg.get('pulse_seconds', 1),
+            }
+    return relays
 
 
 class PowerController:
