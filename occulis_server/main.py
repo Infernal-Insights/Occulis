@@ -37,7 +37,13 @@ async def startup_event():
 
 @app.get("/")
 async def root(token: HTTPAuthorizationCredentials = Depends(verify_token)):
-    rigs = [redis_client.hgetall(rig).decode('utf-8') for rig in redis_client.keys()]
+    rigs = {
+        key.decode("utf-8"): {
+            k.decode("utf-8"): v.decode("utf-8")
+            for k, v in redis_client.hgetall(key).items()
+        }
+        for key in redis_client.keys()
+    }
     return {"rigs": rigs}
 
 
